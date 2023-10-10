@@ -14,7 +14,8 @@
 	<name>Tracker</name>
 	<description>Tracker</description>
 	<properties>
-		<java.version>20</java.version>
+		<java.version>21
+		</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -112,15 +113,6 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<release>20</release>
-					<source>19</source>
-					<target>19</target>
 				</configuration>
 			</plugin>
 		</plugins>
