@@ -1,5 +1,6 @@
 package com.sandu.trackr.model;
 
+import com.sandu.trackr.model.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,13 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 @Data
 @Entity
+@Table(name="app_user")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(unique = true)
@@ -31,7 +31,7 @@ public class User implements UserDetails {
     private String lastName;
 
     @Lob
-    @Column(columnDefinition="MEDIUMBLOB")
+//    @Column(columnDefinition="MEDIUMBLOB")
     private byte[] profilePicture;
 
     private String fileType;

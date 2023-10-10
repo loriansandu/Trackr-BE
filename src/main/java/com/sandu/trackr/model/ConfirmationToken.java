@@ -4,31 +4,31 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 import java.util.Random;
 
 @Entity
-@Table(name="confirmationToken")
+@Table(name="confirmation-token")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@EntityListeners(AuditingEntityListener.class)
 public class ConfirmationToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="token_id")
     private Long tokenId;
 
-    @Column(name="confirmation_token")
     private Integer confirmationToken;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-    //add no args and all args constructer and getter/setter
+
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "id")
+    @JoinColumn(name = "id")
     private User user;
 
     public ConfirmationToken(User user) {
