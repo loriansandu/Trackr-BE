@@ -1,0 +1,12 @@
+package com.sandu.trackr.repository;
+
+import com.sandu.trackr.model.ConfirmationToken;
+import com.sandu.trackr.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface ConfirmationTokenRepository extends JpaRepository <ConfirmationToken, Long> {
+    Optional<ConfirmationToken> findByConfirmationTokenAndUser(Integer confirmationToken, User user);
+    Optional<ConfirmationToken> findByUser(User user);
+}
