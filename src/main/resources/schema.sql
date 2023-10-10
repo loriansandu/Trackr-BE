@@ -1,6 +1,6 @@
 -- schema.sql
 
--- User Table
+-- User TableXF
 CREATE TABLE IF NOT EXISTS user (
                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
                       email VARCHAR(255) UNIQUE NOT NULL,
