@@ -15,7 +15,8 @@ import java.util.List;
 @Table(name="app_user")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
@@ -31,7 +32,7 @@ public class User implements UserDetails {
     private String lastName;
 
     @Lob
-//    @Column(columnDefinition="MEDIUMBLOB")
+    @Column(columnDefinition="MEDIUMBLOB")
     private byte[] profilePicture;
 
     private String fileType;

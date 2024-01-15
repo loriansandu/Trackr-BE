@@ -1,4 +1,4 @@
-package com.sandu.trackr.security1.service;
+package com.sandu.trackr.security.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

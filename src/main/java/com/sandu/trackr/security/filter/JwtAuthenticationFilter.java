@@ -1,6 +1,6 @@
-package com.sandu.trackr.security1.filter;
+package com.sandu.trackr.security.filter;
 
-import com.sandu.trackr.security1.service.JwtService;
+import com.sandu.trackr.security.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

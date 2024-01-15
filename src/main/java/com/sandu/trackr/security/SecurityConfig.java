@@ -1,7 +1,8 @@
-package com.sandu.trackr.security1;
+package com.sandu.trackr.security;
 
-import com.sandu.trackr.security1.filter.JwtAuthenticationFilter;
+import com.sandu.trackr.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -15,7 +16,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -59,30 +59,21 @@ public class SecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-////        configuration.setAllowedOrigins(Arrays.asList("*"));
-//        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH",
-//                "DELETE", "OPTIONS"));
-//        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type",
-//                "x-auth-token"));
-//        configuration.setExposedHeaders(List.of("x-auth-token"));
-//        UrlBasedCorsConfigurationSource source = new
-//                UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//
-//        return source;
-//    }
 @Bean
-CorsConfigurationSource corsConfigurationSource() {
+CorsConfigurationSource corsConfigurationSource(    @Value("${security.allowed.origins}") final List<String> origins,
+                                                    @Value("${security.allowed.headers}") final List<String> headers,
+                                                    @Value("${security.allowed.methods}") final List<String> methods) {
+
     CorsConfiguration configuration = new CorsConfiguration();
 //    configuration.setAllowedOrigins(List.of("*"));
-    configuration.setAllowedOriginPatterns(List.of("*"));
-    configuration.setAllowedMethods(List.of("*"));
-    configuration.setAllowedHeaders(List.of("*"));
+//    configuration.setAllowedOriginPatterns(List.of("*"));
+//    configuration.setAllowedMethods(List.of("*"));
+//    configuration.setAllowedHeaders(List.of("*"));
+//    configuration.setAllowCredentials(true);
     configuration.setAllowCredentials(true);
+    configuration.setAllowedOrigins(origins);
+    configuration.setAllowedHeaders(headers);
+    configuration.setAllowedMethods(methods);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;

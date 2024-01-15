@@ -4,6 +4,7 @@ import com.sandu.trackr.dto.ChangePasswordDto;
 import com.sandu.trackr.dto.ConfirmationTokenDto;
 import com.sandu.trackr.dto.NewUserDto;
 import com.sandu.trackr.dto.UserInfoDto;
+import com.sandu.trackr.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
@@ -14,6 +15,8 @@ public interface UserService {
     String confirmEmail(ConfirmationTokenDto confirmationToken);
 
     UserInfoDto getLoggedUserData();
+
+    User getUser();
 
     String resendVerificationCode(String email);
 

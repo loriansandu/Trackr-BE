@@ -1,4 +1,4 @@
-package com.sandu.trackr.security1.model;
+package com.sandu.trackr.security.model;
 
 import com.sandu.trackr.model.User;
 import lombok.AllArgsConstructor;

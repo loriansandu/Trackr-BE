@@ -23,10 +23,22 @@ public class AppExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\": \"" + ex.getMessage() + "\"}");
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(DateUnavailableException.class)
+    public ResponseEntity<String> handleDateUnavailableException(DateUnavailableException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\": \"" + ex.dates + "\"}");
+    }
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"" + ex.getMessage() + "\"}");
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccountNotVerifiedException.class)
+    public ResponseEntity<String> handleAccountNotVerifiedException(AccountNotVerifiedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\": \"" + ex.getMessage() + "\"}");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -44,6 +56,12 @@ public class AppExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<String> handleUsernameNotFoundException(UsernameNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"" + ex.getMessage() + "\"}");
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(AppointmentNotFoundException.class)
+    public ResponseEntity<String> handleAppointmentNotFoundException(AppointmentNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"" + ex.getMessage() + "\"}");
     }
 

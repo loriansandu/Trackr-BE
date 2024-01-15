@@ -13,7 +13,7 @@ import com.sandu.trackr.model.Role;
 import com.sandu.trackr.model.User;
 import com.sandu.trackr.repository.ConfirmationTokenRepository;
 import com.sandu.trackr.repository.UserRepository;
-import com.sandu.trackr.security1.service.JwtService;
+import com.sandu.trackr.security.service.JwtService;
 import com.sandu.trackr.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +24,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,13 +37,12 @@ import java.util.stream.Collectors;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+//@Transactional
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final ConfirmationTokenRepository confirmationTokenRepository;
@@ -89,17 +89,22 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Map<String, String> login(NewUserDto user) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        user.getEmail(),
-                        user.getPassword()
-                )
-        );
-        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
-        if(existingUser.isEmpty())
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            user.getEmail(),
+                            user.getPassword()
+                    )
+            );
+        } catch (AuthenticationException e) {
+            if(e.getMessage().contains("User is disabled"))
+                throw new AccountNotVerifiedException("Account not verified");
             throw new BadCredentialsException("Bad credentials");
+        }
+        User existingUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
         Map<String, String> data = new HashMap<>();
-        data.put("token", jwtService.generateToken(existingUser.get()));
+        data.put("token", jwtService.generateToken(existingUser));
         return data;
     }
 
@@ -134,9 +139,11 @@ public class UserServiceImpl implements UserService{
         return userInfoDto;
     }
 
-    private static User getUser() {
+    @Override
+    public User getUser() {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
+//        return (User) authentication.getPrincipal();
         return (User) authentication.getPrincipal();
 
     }
@@ -147,8 +154,8 @@ public class UserServiceImpl implements UserService{
         if (user.isEnabled()) {
             throw new AccountAlreadyVerifiedException("Your account is already verified");
         }
-        ConfirmationToken confirmationToken = confirmationTokenRepository.findByUser(user).orElseThrow(() -> new TokenException("This user does not have any verification codes."));
-        confirmationTokenRepository.delete(confirmationToken);
+        Optional<ConfirmationToken> confirmationToken = confirmationTokenRepository.findByUser(user);
+        confirmationToken.ifPresent(confirmationTokenRepository::delete);
 
         ConfirmationToken newConfirmationToken = new ConfirmationToken(user);
         confirmationTokenRepository.save(newConfirmationToken);

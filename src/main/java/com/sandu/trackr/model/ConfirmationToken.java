@@ -14,11 +14,12 @@ import java.util.Random;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 public class ConfirmationToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tokenId;
 
     private Integer confirmationToken;

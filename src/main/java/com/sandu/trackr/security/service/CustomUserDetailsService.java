@@ -1,8 +1,7 @@
-package com.sandu.trackr.security1.service;
+package com.sandu.trackr.security.service;
 
 import com.sandu.trackr.model.User;
 import com.sandu.trackr.repository.UserRepository;
-import com.sandu.trackr.security1.model.CustomUserDetails;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,6 +20,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
-        return new CustomUserDetails(user.get());
+        return user.get();
     }
 }
