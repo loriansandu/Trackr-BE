@@ -37,7 +37,6 @@ public class AuthController {
 
     @PostMapping("/google")
     public ResponseEntity<?> authenticateWithGoogle(@RequestBody String idToken) {
-        System.out.println(idToken);
         Map<String, String> response = userService.loginWithGoogle(idToken);
         return ResponseEntity.ok(response);
     }

@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService{
             throw new BadCredentialsException("Bad credentials");
         }
         User existingUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
+        log.info(existingUser.getEmail() + "logged in");
         Map<String, String> data = new HashMap<>();
         data.put("token", jwtService.generateToken(existingUser));
         return data;
@@ -187,9 +187,8 @@ public class UserServiceImpl implements UserService{
         }
         if (idTokenReceived != null) {
             Payload payload = idTokenReceived.getPayload();
-            log.info(payload.getEmail());
+            log.info(payload.getEmail() + "logged in");
             String userId = payload.getSubject();
-            System.out.println("User ID: " + userId);
             String email = payload.getEmail();
             boolean emailVerified = payload.getEmailVerified();
             String name = (String) payload.get("name");
@@ -225,7 +224,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public String changePassword(ChangePasswordDto changePasswordDto) {
         User user = getUser();
-        System.out.println(passwordEncoder.encode(changePasswordDto.getPassword()));
         if (passwordEncoder.matches(changePasswordDto.getPassword(),user.getPassword())) {
             user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
             userRepository.save(user);
@@ -255,7 +253,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String uploadProfilePicture(MultipartFile file) {
-        System.out.println(file);
         User user = getUser();
         try {
             user.setProfilePicture(file.getBytes());

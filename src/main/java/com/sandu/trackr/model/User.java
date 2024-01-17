@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private String lastName;
 
     @Lob
-    @Column(columnDefinition="MEDIUMBLOB")
+//    @Column(columnDefinition="MEDIUMBLOB")
     private byte[] profilePicture;
 
     private String fileType;

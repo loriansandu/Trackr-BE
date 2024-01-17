@@ -34,7 +34,6 @@ public class UserController {
 
     @PutMapping("/change-number")
     public ResponseEntity<String> changeNumber(@RequestBody String number) {
-        System.out.println(number);
         String response = this.userService.changeNumber(number);
         return ResponseEntity.ok("{\"message\": \"" + response + "\"}");
     }

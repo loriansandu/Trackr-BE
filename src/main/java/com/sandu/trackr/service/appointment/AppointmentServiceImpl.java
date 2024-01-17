@@ -32,7 +32,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Long getLastAppointmentNumber() {
         var user = userService.getUser();
         Appointment lastAppointment = appointmentRepository.findTopByUserOrderByAppointmentNumberDesc(user).orElse(new Appointment());
-        System.out.println(lastAppointment);
         return lastAppointment.getAppointmentNumber();
     }
 
@@ -41,7 +40,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         User user = userService.getUser();
         List<String> unavailableDates = new ArrayList<>();
         for(AppointmentDto appointment : appointments) {
-            System.out.println(appointment);
             appointmentRepository.findByUserAndDate(user, appointment.getDate()).ifPresent(s -> {
                 DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 unavailableDates.add(dateFormat.format(appointment.getDate()));
@@ -91,16 +89,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<AppointmentDto> getAppointmentsByWeek(Date date) {
-        System.out.println(date);
         var user = userService.getUser();
         int weekOfYearToday = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);;
-        System.out.println(weekOfYearToday);
         List<AppointmentDto> appointments = new ArrayList<>();
         for (Appointment appointment : this.appointmentRepository.findAllByUserOrderByDate(user)) {
             LocalDate appointmentLocalDate = appointment.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             int weekOfYearAppointmentDate = appointmentLocalDate.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
             if(weekOfYearToday == weekOfYearAppointmentDate) {
-                System.out.println(weekOfYearAppointmentDate);
                 appointments.add(new AppointmentDto(appointment.getTitle(), appointment.getTrainer(), appointment.getDate(), appointment.getAppointmentNumber()));
             }
         }
@@ -116,7 +111,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setDate(appointmentDto.getDate());
         appointment.setTitle(appointmentDto.getTitle());
         appointment.setTrainer(appointmentDto.getTrainer());
-        System.out.println(appointment);
         appointmentRepository.save(appointment);
         return "Appointment modified";
     }
