@@ -2,6 +2,7 @@ package com.sandu.trackr.controller;
 
 import com.sandu.trackr.dto.*;
 import com.sandu.trackr.service.user.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +29,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@Valid @RequestBody NewUserDto newUserDto) {
+    public ResponseEntity<Object> login(@Valid @RequestBody NewUserDto newUserDto, HttpServletRequest request) {
+        String clientIp = request.getRemoteAddr();
+        System.out.println(clientIp);
 
         Map<String, String> response = userService.login(newUserDto);
+
 
         return ResponseEntity.ok(response);
     }
@@ -70,7 +74,4 @@ public class AuthController {
 
         return ResponseEntity.ok("{\"message\": \"" + response + "\"}");
     }
-
-
-
 }
