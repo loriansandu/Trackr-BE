@@ -15,6 +15,7 @@ import com.sandu.trackr.repository.ConfirmationTokenRepository;
 import com.sandu.trackr.repository.UserRepository;
 import com.sandu.trackr.security.service.JwtService;
 import com.sandu.trackr.service.email.EmailService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -52,6 +53,8 @@ public class UserServiceImpl implements UserService{
     private final AuthenticationManager authenticationManager;
     @Value("${google.client-id}")
     private String googleId;
+    @Value("${SPRING_MAIL_USERNAME}")
+    private String logEmail;
 
 
     @Override
@@ -275,6 +278,22 @@ public class UserServiceImpl implements UserService{
         }
         userRepository.save(user);
         return "Photo deleted";
+    }
+
+    @Override
+    public void log(HttpServletRequest request) {
+        String ipAddress;
+        String forwardHeader= request.getHeader("X-Forwarded-For");
+        if (forwardHeader == null) {
+            ipAddress = request.getRemoteAddr();
+        } else {
+            ipAddress = new StringTokenizer(forwardHeader, ",").nextToken().trim();
+        }
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(logEmail);
+        mailMessage.setSubject("New login");
+        mailMessage.setText("A new login was detected from " + ipAddress);
+        emailService.sendEmail(mailMessage);
     }
 
     public static String generateCommonLangPassword() {

@@ -5,6 +5,7 @@ import com.sandu.trackr.dto.ConfirmationTokenDto;
 import com.sandu.trackr.dto.NewUserDto;
 import com.sandu.trackr.dto.UserInfoDto;
 import com.sandu.trackr.model.User;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
@@ -34,4 +35,5 @@ public interface UserService {
 
     String removeProfilePicture();
 
+    void log(HttpServletRequest request);
 }

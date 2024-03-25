@@ -30,15 +30,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@Valid @RequestBody NewUserDto newUserDto, HttpServletRequest request) {;
-        System.out.println(request);
-        String forwardHeader= request.getHeader("X-Forwarded-For");
-        if (forwardHeader == null) {
-            System.out.println(request.getRemoteAddr());
-        } else {
-            System.out.println(new StringTokenizer(forwardHeader, ",").nextToken().trim());
-        }
-
+    public ResponseEntity<Object> login(@Valid @RequestBody NewUserDto newUserDto, HttpServletRequest request) {
+//        userService.log(request);
         Map<String, String> response = userService.login(newUserDto);
 
 
@@ -53,7 +46,8 @@ public class AuthController {
 
 
     @GetMapping("/validate")
-    public ResponseEntity<Void> validate() {
+    public ResponseEntity<Void> validate(HttpServletRequest request) {
+        userService.log(request);
         return ResponseEntity.ok(null);
     }
 
