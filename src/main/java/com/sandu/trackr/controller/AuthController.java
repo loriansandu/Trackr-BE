@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.StringTokenizer;
 
 @Slf4j
 @RestController
@@ -29,9 +30,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@Valid @RequestBody NewUserDto newUserDto, HttpServletRequest request) {
-        String clientIp = request.getRemoteAddr();
-        System.out.println(clientIp);
+    public ResponseEntity<Object> login(@Valid @RequestBody NewUserDto newUserDto, HttpServletRequest request) {;
+        System.out.println(request);
+        String forwardHeader= request.getHeader("X-Forwarded-For");
+        if (forwardHeader == null) {
+            System.out.println(request.getRemoteAddr());
+        } else {
+            System.out.println(new StringTokenizer(forwardHeader, ",").nextToken().trim());
+        }
 
         Map<String, String> response = userService.login(newUserDto);
 
